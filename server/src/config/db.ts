@@ -18,7 +18,7 @@ export const initializePool = async () => {
         const credentials: credentialsPool = {
             user: process.env.DB_USER!,
             password: process.env.DB_PASSWORD!,
-            connectString: process.env.DB_CONNECT_STRING!,
+            connectString: process.env.DB_CONNNECT_STRING!,
             poolMin: parseInt(process.env.DB_POOL_MIN!),
             poolMax: parseInt(process.env.DB_POOL_MAX!),
             poolIncrement: parseInt(process.env.DB_POOL_INCREMENT!),
