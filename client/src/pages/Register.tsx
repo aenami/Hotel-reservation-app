@@ -1,6 +1,53 @@
-import { Minus, ArrowRight} from "lucide-react"
-import { Link } from "react-router"
+import { useState, type SubmitEventHandler } from 'react'
+import { Minus, ArrowRight, Eye, EyeOff} from "lucide-react"
+import { Link, useNavigate } from "react-router"
+import BackendRes from '../components/BackendRes'
+
 function Register() {
+    const [res, setRes] = useState('')
+    const[visiblePass, setVisibilePass] = useState(false)
+
+    const navigate = useNavigate()
+
+    const hanlderPassword = () => {
+        setVisibilePass(!visiblePass)
+    }
+
+    const hanlderForm:SubmitEventHandler = async (e) => {
+        // Tomamos los valores del formulario
+        const firstName = e.target.fname.value
+        const lastName = e.target.lname.value
+        const email = e.target.email.value
+        const pass = e.target.password.value
+
+        try {
+            // Realizamos la peticion al backend
+            const res = await fetch('http://localhost:5173/auth/register', {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify( { firstName, lastName, email, pass } )
+            })
+
+            // Parsemaos la respuesta
+            const data = await res.json()
+            
+            // Verificamos la respuesta del backend
+            if(!data.ok){
+                // Cambiamos el estado de la respuesta
+                setRes(data.message)
+            }
+
+            // Si llegamos aqui es pq la respuesta fue 2xx
+            navigate('/login')
+        } catch (error) {
+             if(error instanceof Error){
+                setRes(error.message)
+            }
+        } 
+    }
+
   return (
     <main className="text-[#0F172A]">
         {/* ---- NAVBAR ---- */}
@@ -28,28 +75,39 @@ function Register() {
                 </div>
                 
                 {/* ---- FORMULARIO ----- */}
-                <form action="" className="flex flex-col gap-4 text-[#4A5568]">
+                <form action="" onSubmit={hanlderForm} className="flex flex-col gap-4 text-[#4A5568]">
                     <div className="flex flex-wrap justify-between gap-6">
                         <div className="flex flex-col gap-4">
                             <label htmlFor="">FIRST NAME</label>
-                            <input type="text" placeholder="ELIAS" className="bg-[#d2cfcdc1] border-b py-2 px-4"/>
+                            <input type="text" id="fname" placeholder="ELIAS" className="bg-[#d2cfcdc1] border-b py-2 px-4"/>
                         </div>
                         <div className="flex flex-col gap-4">
                             <label htmlFor="">LAST NAME</label>
-                            <input type="text" placeholder="STEARLING" className="bg-[#d2cfcdc1] border-b py-2 px-4"/>
+                            <input type="text" id="lname" placeholder="STEARLING" className="bg-[#d2cfcdc1] border-b py-2 px-4"/>
                         </div>
                     </div>
                     
                     <div className="flex flex-col gap-4">
                         <label htmlFor="">EMAIL ADDRES</label>
-                        <input type="text" placeholder="e.stearling@gmail.com" className="bg-[#d2cfcdc1]  border-b py-2 px-4"/>
-                    </div>
-                    <div className="flex flex-col gap-4">
-                        <label htmlFor="">PASSWORD</label>
-                        <input type="text" placeholder="*******" className="bg-[#d2cfcdc1] border-b py-2 px-4"/>
+                        <input type="text" id='email' placeholder="e.stearling@gmail.com" className="bg-[#d2cfcdc1]  border-b py-2 px-4"/>
                     </div>
 
-                    <button className="flex text-white bg-[#775A19] px-14 py-4 gap-4 justify-center mt-6 cursor-pointer">
+                    <div className="flex flex-col gap-4">
+                        <label htmlFor="">PASSWORD</label>
+                        <div className='relative flex'>
+                            <input type={ visiblePass ? 'text' : 'password'} id='password' placeholder="*******" className="bg-[#d2cfcdc1] border-b py-2 px-4 pr-14 absolute w-full"/>
+                            
+                            { visiblePass ? 
+                            <EyeOff size={25} onClick={hanlderPassword} className='absolute top-2 right-3 cursor-pointer'/>
+                            : 
+                            <Eye size={25} onClick={hanlderPassword} className='absolute top-2 right-3 cursor-pointer' />}
+                        </div>
+                        
+                    </div>
+
+                    { res ? <BackendRes message={res}/> : null }
+
+                    <button className="flex text-white bg-[#775A19] px-14 py-4 gap-4 justify-center mt-16 cursor-pointer">
                         CREATE ACCOUNT <ArrowRight size={25}/>
                     </button>
                 </form>
