@@ -1,11 +1,14 @@
-type Response = {
-    message: string
+type TResponse = {
+  response: {
+    err: boolean;
+    message: string;
+  }
 }
 
-function BackendRes({message}: Response) {
+function BackendRes({response}: TResponse) {
   return (
-    <div>
-      <span className="text-red-500">{message}</span>
+    <div className={response.err === true ? 'bg-red-300' : 'bg-green-300'}>
+      <span className={response.err === true ? 'text-red-600' : 'bg-green-600'}>{ response.message}</span>
     </div>
   )
 }

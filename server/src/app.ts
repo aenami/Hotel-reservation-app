@@ -6,7 +6,7 @@ dotenv.config();
 const app = express()
 
 // -------Importando rutas
-
+import AuthenticationRoutes from './routes/auth.routes'
 
 
 // ------- Settings de nuestro backend
@@ -23,9 +23,8 @@ app.use(express.json())
 app.use(express.urlencoded( {extended: false} ))
 
 
-
 // ------- RUTAS CREADAS -----
-
+app.use('/auth', AuthenticationRoutes)
 
 // ------ RUTA POR DEFAULT
 
