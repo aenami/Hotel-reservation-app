@@ -2,12 +2,13 @@ import { CircleUserRound } from 'lucide-react'
 import { tokenManager } from '../utils/tokenManager'
 import { Link } from 'react-router'
 import SuitCard from '../components/homePage/SuitCard';
+import ResumReservation from '../components/homePage/resumReservation';
 
 function HomePage() {
   const user = tokenManager.getUser();
 
   return (
-    <main className=''>
+    <main className='bg-[#f8f8f6]'>
       <header className='flex justify-between px-6 py-7 sticky w-full top-0 backdrop-blur-2xl z-10'>
         <h2 className="font-headline font-bold md:text-2xl">LUXE RESERVE</h2>
         <div className='flex gap-6 text-[#4A5568]'>
@@ -20,7 +21,7 @@ function HomePage() {
       </header>
 
       
-      <section className='grid grid-cols-1 py-4 px-12 gap-14 lg:grid-cols-[2fr_1fr] '>
+      <section className='grid grid-cols-1 py-4 px-12 gap-14 lg:grid-cols-[2fr_1fr]'>
         {/* ---- SECCION DE HABITACIONES ---- */}
         <div className='flex flex-col gap-14'>
           <div>
@@ -38,38 +39,15 @@ function HomePage() {
           {/* ----Seccion de las observaciones ---- */}
           <section className='flex flex-col gap-6 text-sm'>
             <h2 className='font-bold font-headline text-3xl'>Reservation Details</h2>
-            <span className='text-base'>ADDITIONAL COMMENTS OR SPECIAL REQUESTS</span>
-            <input type="text" />
-            <span>WE WILL REVIEW THESE DETAILS TO CURATE YOUR STAY</span>
+            <span className='text-base '>Additional comments or special requests</span>
+            <textarea name="" id="" placeholder='Let us know how we can make your sanctuary truly bestpoke' className='bg-[#f4f4f2] h-40 rounded-lg ring-[#2563eb] focus:ring-1 p-6'></textarea>
+            <span>We will review these details to acurate your stay</span>
           </section>
 
         </div>
         
         {/* ----SECCION DEL RESUMEN DE LA RESERVA------ */}
-        <aside className='p-6 '>
-          <div>
-            <h2 className='font-bold'>Reservation summary</h2>
-
-            <div>
-              <div>
-                <h3>Royal Ocean Suite</h3>
-                <span>1 x $1200 / NIGHT</span>
-              </div>
-              <span>$1200</span>
-            </div>
-
-            <hr />
-            <div>
-              <h3>Total Amount</h3>
-              <h1 className='font-bold'>$1,380</h1>
-            </div>
-
-            <button className='px-10 py-4'>COMPLETE RESERVATIONS</button>
-          </div>
-
-        </aside>
-
-
+        <ResumReservation/>
 
       </section>
       
