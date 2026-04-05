@@ -1,7 +1,18 @@
-function ResumReservation() {
+
+
+type propsResumeReserv = {
+	modal: () => void;
+}
+
+function ResumReservation({ modal }: propsResumeReserv) {
+
+	const confirmReservation = () => {
+		modal()
+	}
+
 	return (
-		<aside className="overflow-y-auto">
-			<div className="flex flex-col p-8 bg-white rounded-md gap-6">
+		<aside className="sticky top-20 max-h-150">
+			<div className="flex flex-col p-8 bg-white rounded-md gap-6 mt-14">
 				<h2 className="font-bold font-headline text-2xl">Reservation summary</h2>
 
 				<div className="flex justify-between items-center">
@@ -19,7 +30,8 @@ function ResumReservation() {
 					<h1 className="font-bold text-3xl">$1,380</h1>
 				</div>
 
-				<button className="bg-black rounded-sm px-10 py-4 text-white ">COMPLETE RESERVATIONS</button>
+				<button onClick={confirmReservation}
+				className="bg-black rounded-sm px-10 py-4 text-white cursor-pointer">COMPLETE RESERVATIONS</button>
 			</div>
 		</aside>
 	);
