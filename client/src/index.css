@@ -6,4 +6,28 @@
 @theme {
   --font-sans: 'Manrope', sans-serif;        
   --font-headline: 'Noto Serif', sans-serif;
+
+  --color-primary: #000000;
+  --color-secondary: #775a19;
+  --color-surface: #f9f9f7;
+  --color-surface-low: #f4f4f2;
+  --color-surface-lowest: #ffffff;
+  --color-outline: #76777d;
+  --color-on-surface-variant: #45464d;
+}
+
+@layer base {
+  body {
+    @apply bg-surface text-primary font-sans antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif;
+  }
+}
+
+@layer utilities {
+  .hero-gradient {
+    background: linear-gradient(to right, rgba(249, 249, 247, 1) 40%, rgba(249, 249, 247, 0) 100%);
+  }
 }
