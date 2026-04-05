@@ -12,6 +12,7 @@ function App() {
       <Routes>
         <Route path='/login' element={ <Login/> } />
         <Route path='/register' element={ <Register/> } />
+        <Route path='/landingPage' element={ <h1>Bienveinod  A LA LANDING PAGE</h1>} />
 
         {/* --- Rutas protegidas ---- */}
         <Route path='/homePage' element={ <HomePage/> } />
