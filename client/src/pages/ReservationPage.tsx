@@ -1,9 +1,9 @@
 import { CircleUserRound } from 'lucide-react';
 import { tokenManager } from '../utils/tokenManager';
 import { Link } from 'react-router';
-import SuitCard from '../components/homePage/SuitCard';
-import ResumReservation from '../components/homePage/ResumReservation';
-import ConfirmationModal from '../components/homePage/ConfirmationModal';
+import SuitCard from '../components/reservationPage/SuitCard';
+import ResumReservation from '../components/reservationPage/ResumReservation';
+import ConfirmationModal from '../components/reservationPage/ConfirmationModal';
 import { useState } from 'react';
 
 function ReservationPage() {
@@ -47,7 +47,7 @@ function ReservationPage() {
             <section className='flex flex-col gap-6 text-sm'>
               <h2 className='font-bold font-headline text-3xl'>Reservation Details</h2>
               <span className='text-base '>Additional comments or special requests</span>
-              <textarea name="" id="observations" placeholder='Let us know how we can make your sanctuary truly bestpoke' className='bg-[#f4f4f2] h-40 rounded-lg ring-[#2563eb] focus:ring-1 p-6'></textarea>
+              <textarea name="" id="observations" placeholder='Let us know how we can make your sanctuary truly bestpoke' className='bg-surface-low h-40 rounded-lg ring-[#2563eb] focus:ring-1 p-6'></textarea>
               <span>We will review these details to acurate your stay</span>
             </section>
 
@@ -60,8 +60,6 @@ function ReservationPage() {
 
       {/* ---- MODAL DE CONFIRMACION RESERVA ----- */}
       { visibleModal ? <ConfirmationModal onClose={ () => setVisibileModal(false) } /> : null}
-      
-
     </main>
   )
 }
