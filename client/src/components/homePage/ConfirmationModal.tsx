@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import FirstPart from './modal/FirstPart';
-import SecondPart from './modal/SecondPart';
+import PreConfirmation from './modal/PreConfirmation';
+import ConfirmReservation from './modal/ConfirmReservation';
 
 type modalProps = {
     onClose: () => void;
@@ -22,12 +22,12 @@ function ConfirmationModal({ onClose }: modalProps) {
     }, []);
 
     return (
-        <section className=" fixed inset-0 bg-black/50 backdrop-blur-2xl flex items-center justify-center z-20 px-10">
+        <section className="fixed inset-0 bg-black/50 backdrop-blur-2xl flex items-center justify-center z-20 px-10">
             {/* --- Evalua que parte del modal debe mostrar --- */}
             { step === 1 ? 
-            <FirstPart onclose={ onClose } setStep={ ()=> setStep(2) } /> 
+            <PreConfirmation onclose={ onClose } setStep={ ()=> setStep(2) } /> 
             :  
-            <SecondPart onclose={ onClose }/>}
+            <ConfirmReservation onclose={ onClose }/>}
         </section>
     )
 }

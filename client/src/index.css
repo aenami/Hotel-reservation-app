@@ -1,10 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Noto+Serif:ital,wght@0,100..900;1,100..900&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet');
 
-
 @import "tailwindcss";
 
 @theme {
-  --font-sans: 'Manrope', sans-serif;        
+  --font-sans: 'Manrope', sans-serif;
   --font-headline: 'Noto Serif', sans-serif;
 
   --color-primary: #000000;
@@ -16,18 +15,11 @@
   --color-on-surface-variant: #45464d;
 }
 
-@layer base {
-  body {
-    @apply bg-surface text-primary font-sans antialiased;
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
   }
-
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-serif;
-  }
-}
-
-@layer utilities {
-  .hero-gradient {
-    background: linear-gradient(to right, rgba(249, 249, 247, 1) 40%, rgba(249, 249, 247, 0) 100%);
+  100% {
+    opacity: 1;
   }
 }
