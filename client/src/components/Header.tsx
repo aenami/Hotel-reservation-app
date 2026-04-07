@@ -10,8 +10,7 @@ export function Header() {
 
       <nav className="hidden md:flex items-center space-x-12">
         <a href="#" className="text-secondary font-bold text-[10px] uppercase tracking-[0.2em]">Reserve</a>
-        <a href="#" className="text-on-surface-variant/60 hover:text-secondary transition-colors font-medium text-[10px] uppercase tracking-[0.2em]">Suites</a>
-        <a href="#" className="text-on-surface-variant/60 hover:text-secondary transition-colors font-medium text-[10px] uppercase tracking-[0.2em]">Concierge</a>
+        <a href="#" className="text-on-surface-variant/60 hover:text-secondary transition-colors font-medium text-[10px] uppercase tracking-[0.2em]">Reservation History</a>
       </nav>
 
       <div className="flex items-center gap-8">

@@ -8,16 +8,14 @@ import { useState } from 'react';
 
 function ReservationPage() {
   const user = tokenManager.getUser();
-
-
   const [visibleModal, setVisibileModal] = useState(false)
 
   return (
     <main className='bg-[#f8f8f6] relative'>
-      <header className='flex justify-between px-6 py-7 sticky w-full top-0 backdrop-blur-2xl z-10'>
+      <header className='flex justify-between items-center px-6 py-7 sticky w-full top-0 backdrop-blur-2xl z-10'>
         <h2 className="font-headline font-bold md:text-2xl">LUXE RESERVE</h2>
         <div className='flex gap-6 text-[#4A5568]'>
-          <div className='flex gap-2'>
+          <div className='flex gap-4'>
             <CircleUserRound size={20} color='#4A5568'/>
             <span> WELCOME, { user.nombre}  </span>
           </div>

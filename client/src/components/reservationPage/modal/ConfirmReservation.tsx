@@ -1,9 +1,82 @@
 import { motion } from "framer-motion";
-import { CheckCircle2, Printer, Calendar, ArrowRight } from "lucide-react";
+import { CheckCircle2, ArrowRight } from "lucide-react";
 
 type modalProps = {
 	onclose: () => void;
 };
+
+
+const ModalHeader = ()=> (
+	<div className="space-y-4 mb-10">
+		<motion.span
+			initial={{ opacity: 0, y: 10 }}
+			animate={{ opacity: 1, y: 0 }}
+			transition={{ delay: 0.4 }}
+			className="block text-[10px] tracking-[0.3em] uppercase text-on-surface-variant font-bold"
+		>
+			Reservation Confirmed
+		</motion.span>
+
+		<motion.h1
+			initial={{ opacity: 0, y: 10 }}
+			animate={{ opacity: 1, y: 0 }}
+			transition={{ delay: 0.5 }}
+			className="font-headline text-3xl md:text-4xl text-primary tracking-tight"
+		>
+			Success
+		</motion.h1>
+
+		<motion.p
+			initial={{ opacity: 0, y: 10 }}
+			animate={{ opacity: 1, y: 0 }}
+			transition={{ delay: 0.6 }}
+			className="font-headline italic text-xl md:text-xl text-on-surface-variant font-light leading-relaxed"
+		>
+			Your sanctuary has been reserved, Julian.
+		</motion.p>
+	</div>
+)
+
+const ReservationDetails = () => (
+	<motion.div
+		initial={{ opacity: 0 }}
+		animate={{ opacity: 1 }}
+		transition={{ delay: 0.7 }}
+		className="w-full space-y-6 mb-12"
+	>
+		{/* Decorative Divider */}
+		<div className="h-1px w-12 bg-secondary/30 mx-auto" />
+
+		<div className="flex flex-col md:flex-row justify-center items-center gap-6 md:gap-12 text-[11px] tracking-[0.2em] uppercase font-bold text-primary">
+			<div className="flex flex-col items-center">
+				<span className="text-on-surface-variant font-medium mb-2">
+					Reservation Number
+				</span>
+				<span className="text-sm tracking-normal">
+					#NR-8829-2024
+				</span>
+			</div>
+
+			{/* Vertical Divider for Desktop */}
+			<div className="hidden md:block h-8 w-px bg-outline/20" />
+
+			<div className="flex flex-col items-center">
+				<span className="text-on-surface-variant font-medium mb-2">
+					Status
+				</span>
+				<span className="flex items-center gap-2 text-sm tracking-normal">
+					<span className="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse" />
+					Confirmed & Secured
+				</span>
+			</div>
+		</div>
+
+		{/* Decorative Divider */}
+		<div className="h-px w-12 bg-secondary/30 mx-auto" />
+	</motion.div>
+
+)
+
 
 function ConfirmReservation({ onclose }: modalProps) {
 	return (
@@ -29,72 +102,10 @@ function ConfirmReservation({ onclose }: modalProps) {
 			</motion.div>
 
 			{/* Header Section */}
-			<div className="space-y-4 mb-10">
-				<motion.span
-					initial={{ opacity: 0, y: 10 }}
-					animate={{ opacity: 1, y: 0 }}
-					transition={{ delay: 0.4 }}
-					className="block text-[10px] tracking-[0.3em] uppercase text-on-surface-variant font-bold"
-				>
-					Reservation Confirmed
-				</motion.span>
-
-				<motion.h1
-					initial={{ opacity: 0, y: 10 }}
-					animate={{ opacity: 1, y: 0 }}
-					transition={{ delay: 0.5 }}
-					className="font-headline text-3xl md:text-4xl text-primary tracking-tight"
-				>
-					Success
-				</motion.h1>
-
-				<motion.p
-					initial={{ opacity: 0, y: 10 }}
-					animate={{ opacity: 1, y: 0 }}
-					transition={{ delay: 0.6 }}
-					className="font-headline italic text-xl md:text-xl text-on-surface-variant font-light leading-relaxed"
-				>
-					Your sanctuary has been reserved, Julian.
-				</motion.p>
-			</div>
+			<ModalHeader/>
 
 			{/* Reservation Details Box */}
-			<motion.div
-				initial={{ opacity: 0 }}
-				animate={{ opacity: 1 }}
-				transition={{ delay: 0.7 }}
-				className="w-full space-y-6 mb-12"
-			>
-				{/* Decorative Divider */}
-				<div className="h-1px w-12 bg-secondary/30 mx-auto" />
-
-				<div className="flex flex-col md:flex-row justify-center items-center gap-6 md:gap-12 text-[11px] tracking-[0.2em] uppercase font-bold text-primary">
-					<div className="flex flex-col items-center">
-						<span className="text-on-surface-variant font-medium mb-2">
-							Reservation Number
-						</span>
-						<span className="text-sm tracking-normal">
-							#NR-8829-2024
-						</span>
-					</div>
-
-					{/* Vertical Divider for Desktop */}
-					<div className="hidden md:block h-8 w-px bg-outline/20" />
-
-					<div className="flex flex-col items-center">
-						<span className="text-on-surface-variant font-medium mb-2">
-							Status
-						</span>
-						<span className="flex items-center gap-2 text-sm tracking-normal">
-							<span className="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse" />
-							Confirmed & Secured
-						</span>
-					</div>
-				</div>
-
-				{/* Decorative Divider */}
-				<div className="h-px w-12 bg-secondary/30 mx-auto" />
-			</motion.div>
+			<ReservationDetails/>
 
 			{/* Informational Text */}
 			<motion.p
@@ -120,24 +131,6 @@ function ConfirmReservation({ onclose }: modalProps) {
 					<ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-1" />
 				</motion.button>
 			</div>
-
-			{/* Footer Auxiliary Actions */}
-			<motion.div
-				initial={{ opacity: 0 }}
-				animate={{ opacity: 1 }}
-				transition={{ delay: 1 }}
-				className="flex flex-wrap items-center gap-8 border-t border-outline/10 w-full justify-center"
-			>
-				<button className="flex items-center gap-2 text-[10px] font-bold tracking-[0.15em] text-on-surface-variant hover:text-secondary transition-colors uppercase group">
-					<Printer className="w-3.5 h-3.5 transition-transform group-hover:-translate-y-0.5" />
-					Print Receipt
-				</button>
-
-				<button className="flex items-center gap-2 text-[10px] font-bold tracking-[0.15em] text-on-surface-variant hover:text-secondary transition-colors uppercase group">
-					<Calendar className="w-3.5 h-3.5 transition-transform group-hover:-translate-y-0.5" />
-					Add to Calendar
-				</button>
-			</motion.div>
 		</motion.div>
 	);
 }

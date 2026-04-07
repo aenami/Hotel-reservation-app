@@ -10,7 +10,7 @@ function SuitCard() {
     }
 
     const handlerRest = () => {
-        setCounter( (prev) => prev-1)
+        if(counter > 0) setCounter( (prev) => prev-1)
     }
   return (
       <div className='flex flex-col gap-6'>
@@ -20,7 +20,7 @@ function SuitCard() {
                 <div className='flex justify-between'>
                   <h2 className='text-2xl font-bold'>Azure Studio</h2>
                   <div className='flex gap-1'>
-                    <span className='text-[#8e6314]'>$450</span>
+                    <span className='text-[#8e6314] font-bold'>$450</span>
                     <span>/ NIGHT</span>
                   </div>
                 </div>
