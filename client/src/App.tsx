@@ -4,12 +4,24 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import ReservationPage from './pages/ReservationPage'
 import WelcomePage from './pages/WelcomePage'
+import { useLocation } from 'react-router'
+import { useEffect } from 'react'
+
+function ScrollToTop() {
+  const { pathname } = useLocation()
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
+
+  return null
+}
 
 function App() {
 
   return (
     <BrowserRouter>
-
+      <ScrollToTop />
       <Routes>
         <Route path='/login' element={ <Login/> } />
         <Route path='/register' element={ <Register/> } />

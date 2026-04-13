@@ -1,7 +1,7 @@
 
 export function Header() {
   return (
-    <header className="fixed top-0 z-50 w-full bg-white/80 backdrop-blur-lg flex justify-between items-center px-8 h-20">
+    <header className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-lg flex justify-between items-center px-8 h-20">
       <div className="flex items-center gap-6">
         <div className="font-serif italic text-2xl tracking-tighter leading-none">
           LUXE RESERVE

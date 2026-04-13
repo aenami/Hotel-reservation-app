@@ -1,13 +1,27 @@
 import { Header } from '../components/Header';
-import { useState } from 'react';
 import { motion } from "framer-motion";
 import { Calendar as CalendarIcon, ArrowRight } from "lucide-react";
 import { MantineProvider, createTheme, Text,  Stack, Popover,UnstyledButton } from '@mantine/core';
-
 import { DatePicker } from '@mantine/dates';
 import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
 import dayjs from 'dayjs';
+import { useBookingStore } from '../store/booking';
+import { useShallow } from 'zustand/shallow';
+import { validateBooking } from '../utils/validateBooking';
+import Error from '../components/welcomePage/Error';
+import { useState } from 'react';
+import { useNavigate } from 'react-router';
+
+// Acciones que nunca van a cambiar
+const setDepartureDate = useBookingStore.getState().setDepartureDate
+const setDepartureTime = useBookingStore.getState().setDepartureTime
+
+const setArrivalDate = useBookingStore.getState().setArrivalDate
+const setArrivalTime = useBookingStore.getState().setArrivalTime
+
+const timePresets = ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00'];
+
 
 const theme = createTheme({
   fontFamily: 'Manrope, sans-serif',
@@ -31,15 +45,21 @@ const theme = createTheme({
   primaryColor: 'brand',
 });
 
-
 const ArrivalCard = () => {
-  const timePresets = ['09:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '01:00 PM', '02:00 PM', '03:00 PM', '04:00 PM'];
-  const [arrivalDate, setArrivalDate] = useState<Date | null>(new Date(2024, 9, 24));
-  const [arrivalTime, setArrivalTime] = useState('02:00 PM');
-  
+  // Consumimos el store
+  const [arrivalDate, arrivalTime] = useBookingStore( 
+    useShallow(state => [state.arrivalDate, state.arrivalTime])
+  )
+
+  // Variables a mostrar
+  const arrivalTimeString = arrivalTime
+  ? dayjs(arrivalTime).format('HH:mm')
+  : 'Select an hour'
+
+
   const hanlderChangeDate = (date: string | null) => {
     if(!date) return;
-    setArrivalDate( new Date(date) )
+    setArrivalDate( dayjs(date).toDate() )
   }
 
   return (
@@ -64,12 +84,13 @@ const ArrivalCard = () => {
           </Popover>
         </Stack>
 
+        {/* ---- Parte de la HORA ----- */}
         <Stack gap={4}>
           <Text size="xs" fw={700} tt="uppercase" lts="0.1em" c="dimmed">Check-in Time</Text>
           <Popover position="bottom-end" shadow="md">
             <Popover.Target>
               <UnstyledButton className="border-b border-outline/20 py-1 font-headline text-xl text-secondary flex items-center justify-between hover:border-secondary transition-colors">
-                {arrivalTime}
+                {arrivalTimeString}
               </UnstyledButton>
             </Popover.Target>
             <Popover.Dropdown p="xs">
@@ -77,8 +98,12 @@ const ArrivalCard = () => {
                 {timePresets.map(t => (
                   <UnstyledButton
                     key={t}
-                    onClick={() => setArrivalTime(t)}
-                    className={`px-4 py-2 text-sm rounded hover:bg-surface-low transition-colors ${arrivalTime === t ? 'bg-secondary/10 text-secondary font-bold' : ''}`}
+                    onClick={ () => {
+                      const [hour, minutes] = t.trim().split(':')
+                      const newTime = dayjs().hour(Number(hour)).minute(Number(minutes)).second(0).toDate()
+                      setArrivalTime(newTime)
+                    }}
+                    className={`px-4 py-2 text-sm rounded hover:bg-surface-low transition-colors ${arrivalTimeString === t ? 'bg-secondary/10 text-secondary font-bold' : ''}`}
                   >
                     {t}
                   </UnstyledButton>
@@ -94,13 +119,20 @@ const ArrivalCard = () => {
 }  
 
 const DepartureCard = () => {
-  const timePresets = ['09:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '01:00 PM', '02:00 PM', '03:00 PM', '04:00 PM'];
-  const [departureDate, setDepartureDate] = useState<Date | null>(null);
-  const [departureTime, setDepartureTime] = useState('11:00 AM');
+  // Consumimos el store
+  const [departureDate, departureTime] = useBookingStore( 
+    useShallow(state => [state.departureDate, state.departureTime])
+  )
+
+  // Variables a mostrar
+  const arrivalTimeString = departureTime
+  ? dayjs(departureTime).format('HH:mm')
+  : 'Select an hour'
+
 
   const hanlderChangeDate = (date: string | null) => {
-    if(!date) return
-    setDepartureDate(new Date(date) )
+    if(!date) return;
+    setDepartureDate( dayjs(date).toDate() )
   }
 
   return (
@@ -120,17 +152,18 @@ const DepartureCard = () => {
               </UnstyledButton>
             </Popover.Target>
             <Popover.Dropdown p={0}>
-              <DatePicker value={departureDate} minDate={ new Date() } onChange={ (dateSelected) => hanlderChangeDate(dateSelected) } />
+              <DatePicker value={departureDate} minDate={ new Date() } onChange={ (value) => hanlderChangeDate(value)  } />
             </Popover.Dropdown>
           </Popover>
         </Stack>
 
+        {/* ---- Parte de la HORA ----- */}
         <Stack gap={4}>
-          <Text size="xs" fw={700} tt="uppercase" lts="0.1em" c="dimmed">Check-out Time</Text>
+          <Text size="xs" fw={700} tt="uppercase" lts="0.1em" c="dimmed">Check-in Time</Text>
           <Popover position="bottom-end" shadow="md">
             <Popover.Target>
               <UnstyledButton className="border-b border-outline/20 py-1 font-headline text-xl text-secondary flex items-center justify-between hover:border-secondary transition-colors">
-                {departureTime}
+                {arrivalTimeString}
               </UnstyledButton>
             </Popover.Target>
             <Popover.Dropdown p="xs">
@@ -138,8 +171,12 @@ const DepartureCard = () => {
                 {timePresets.map(t => (
                   <UnstyledButton
                     key={t}
-                    onClick={() => setDepartureTime(t)}
-                    className={`px-4 py-2 text-sm rounded hover:bg-surface-low transition-colors ${departureTime === t ? 'bg-secondary/10 text-secondary font-bold' : ''}`}
+                    onClick={ () => {
+                      const [hour, minutes] = t.trim().split(':')
+                      const newTime = dayjs().hour(Number(hour)).minute(Number(minutes)).second(0).toDate()
+                      setDepartureTime(newTime)
+                    }}
+                    className={`px-4 py-2 text-sm rounded hover:bg-surface-low transition-colors ${arrivalTimeString === t ? 'bg-secondary/10 text-secondary font-bold' : ''}`}
                   >
                     {t}
                   </UnstyledButton>
@@ -149,14 +186,28 @@ const DepartureCard = () => {
           </Popover>
         </Stack>
       </div>
-      <Text size="10px" fs="italic" c="dimmed" mt="md">Standard check-out is at 11:00 AM</Text>
+      <Text size="10px" fs="italic" c="dimmed" mt="md">Standard check-in begins at 02:00 PM</Text>
     </div>
   )
-}
+}  
 
 
 function WelcomePage() {
-  
+  const [isError, setIsError] = useState(false)
+  const navigate = useNavigate();
+
+  const hanlderButton = () => {
+    if(!validateBooking()){
+      // Fecha de la reserva invalida
+      setIsError(true)
+      
+    }else{
+      // Logica a ejecutar si la fecha de la reserva es valida
+      navigate('/reservation')
+      setIsError(false)
+    }
+  }
+
   return (
     <MantineProvider theme={theme}>
       <div className="min-h-screen bg-surface selection:bg-secondary/20">
@@ -164,7 +215,7 @@ function WelcomePage() {
         {/* HEADER */}
         <Header/>
 
-        <main className="relative pt-20 min-h-screen flex flex-col lg:flex-row">
+        <main className="relative min-h-screen flex flex-col lg:flex-row">
           
           {/* LEFT CONTENT */}
           <section className="flex-1 px-6 lg:px-24 py-12 lg:py-24 z-10">
@@ -193,16 +244,20 @@ function WelcomePage() {
                 <DepartureCard/>
               </div>
 
+              {/* ---- Error Message  ----- */}
+              { isError ? <Error/> : null }
+
               {/* ACTIONS */}
               <div className="flex flex-col sm:flex-row items-center gap-8 mb-16">
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="w-full sm:w-auto bg-primary text-white px-10 py-5 rounded font-bold text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-black/10 hover:bg-primary/90 transition-all"
+                  onClick={hanlderButton}
+                  className="w-full sm:w-auto bg-primary text-white px-10 py-5 cursor-pointer rounded font-bold text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-black/10 hover:bg-primary/90 transition-all"
                 >
                   Proceed to Booking
                 </motion.button>
-                <button className="flex items-center gap-2 text-secondary font-bold text-[10px] uppercase tracking-[0.2em] group">
+                <button className="flex items-center gap-2 text-secondary cursor-pointer font-bold text-[10px] uppercase tracking-[0.2em] group">
                   Explore All Suites
                   <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                 </button>
