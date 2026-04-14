@@ -163,6 +163,4 @@ const User: typeUser = {
 
 }
 
-
-
 export default User

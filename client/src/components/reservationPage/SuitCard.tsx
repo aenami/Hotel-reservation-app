@@ -1,14 +1,12 @@
 import habitacion1 from '../../assets/homePage/habitacion2.jpg'
 import { useState } from 'react'
+import type { Rooms } from '../../types/dataTypes';
 
 interface DataRoom {
-    name: string;
-    description: string;
-    price: number;
-    capacity: number;
+    data: Rooms
 }
 
-function SuitCard({ name, description, price, capacity }: DataRoom) {
+function SuitCard({ data }: DataRoom) {
     const [counter, setCounter] = useState(0)
 
     const hanlderSum = () => {
@@ -25,13 +23,13 @@ function SuitCard({ name, description, price, capacity }: DataRoom) {
           <div className='flex flex-col gap-6'>
             <div className='flex flex-col gap-2'>
                 <div className='flex justify-between'>
-                  <h2 className='text-2xl font-bold'>{name}</h2>
+                  <h2 className='text-2xl font-bold'>{data.name}</h2>
                   <div className='flex gap-1'>
-                    <span className='text-[#8e6314] font-bold'>${price}</span>
-                    <span>/ NIGHT - {capacity}</span>
+                    <span className='text-[#8e6314] font-bold'>${data.price}</span>
+                    <span>/ NIGHT - {data.capacity}</span>
                   </div>
                 </div>
-                <span>{description}</span>
+                <span>Descripcion de prueba</span>
             </div>
             <hr className='bg-[#4A5568]' />
             <div className='flex justify-between items-center'>

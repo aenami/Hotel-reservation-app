@@ -7,7 +7,7 @@ const app = express()
 
 // -------Importando rutas
 import AuthenticationRoutes from './routes/auth.routes'
-
+import RoomTypesRoutes from './routes/roomTypes.routes'
 
 // ------- Settings de nuestro backend
 app.set('case sensitive Routing', true)
@@ -25,6 +25,7 @@ app.use(express.urlencoded( {extended: false} ))
 
 // ------- RUTAS CREADAS -----
 app.use('/auth', AuthenticationRoutes)
+app.use('/roomTypes', RoomTypesRoutes)
 
 // ------ RUTA POR DEFAULT
 

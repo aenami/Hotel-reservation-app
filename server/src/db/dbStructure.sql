@@ -40,7 +40,7 @@ CREATE TABLE reserva(
 CREATE TABLE tipoHabitacion(
     id_tipoHabitacion NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     nombre_tipoHabitacion VARCHAR(40) NOT NULL,
-    descripcion_tipoHabitacion CLOB NOT NULL,
+    descripcion_tipoHabitacion VARCHAR(200) NOT NULL,
     precio_tipoHabitacion NUMBER(10,2) NOT NULL,
     capacidad_tipoHabitacion NUMBER NOT NULL, 
 

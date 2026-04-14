@@ -6,13 +6,7 @@ import ConfirmationModal from '../components/reservationPage/ConfirmationModal';
 import { useState, useEffect } from 'react';
 import { Header } from '../components/Header';
 import ErrorBackend from '../components/reservationPage/ErrorBackend';
-
-type Rooms = {
-  name: string;
-  description: string;
-  price: number;
-  capacity: number;
-}
+import type { Rooms } from '../types/dataTypes';
 
 function ReservationPage() {
   //const user = tokenManager.getUser();
@@ -31,10 +25,10 @@ function ReservationPage() {
         // Verificamos si al respuesta que devolvio el servidor fue 2xx u otra distinta
         if(!res.ok){
           setIsError(data.message)
-          return undefined
+          return
         }
         // Seteamos la informacion consultada del backend
-        setDataRooms(data)
+        setDataRooms(data.rooms)
         
       } catch (error) {
         setIsError( error instanceof Error 
@@ -69,7 +63,7 @@ function ReservationPage() {
             {/* ---- SECCION DE HABITACIONES ----- */}
             <section className='grid grid-cols-1 gap-12 sm:grid-cols-[1fr_1fr] '>
               { dataRooms 
-              ? dataRooms.map( room => (<SuitCard data={room}/>))
+              ? dataRooms.map( room => (<SuitCard key={room.id} data={room}/>))
               : null }
             </section>
 
