@@ -22,7 +22,7 @@ function ConfirmationModal({ onClose }: modalProps) {
     }, []);
 
     return (
-        <section className="fixed inset-0 bg-black/50 backdrop-blur-2xl flex items-center justify-center z-20 px-10 py-4">
+        <section className="fixed inset-0 bg-black/50 backdrop-blur-2xl flex items-center justify-center z-60 px-10 py-4">
             {/* --- Evalua que parte del modal debe mostrar --- */}
             { step === 1 ? 
             <PreConfirmation onclose={ onClose } setStep={ ()=> setStep(2) } /> 

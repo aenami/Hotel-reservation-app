@@ -3,12 +3,52 @@
 import SuitCard from '../components/reservationPage/SuitCard';
 import ResumReservation from '../components/reservationPage/ResumReservation';
 import ConfirmationModal from '../components/reservationPage/ConfirmationModal';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Header } from '../components/Header';
+import ErrorBackend from '../components/reservationPage/ErrorBackend';
+
+type Rooms = {
+  name: string;
+  description: string;
+  price: number;
+  capacity: number;
+}
 
 function ReservationPage() {
   //const user = tokenManager.getUser();
   const [visibleModal, setVisibileModal] = useState(false)
+  const [isError, setIsError] = useState('')
+  const [dataRooms, setDataRooms] = useState<Rooms[] | undefined>(undefined)
+  const [isLoading, setIsLoading] = useState(false)
+
+  // useEffect que se encarga de traer la informacion de las habitaciones a mostrar
+  useEffect(  () =>{
+    const fetchRooms = async () => {
+      setIsLoading(true)
+      try {
+        const res = await fetch('http://localhost:3000/roomTypes')
+        const data = await res.json()
+        // Verificamos si al respuesta que devolvio el servidor fue 2xx u otra distinta
+        if(!res.ok){
+          setIsError(data.message)
+          return undefined
+        }
+        // Seteamos la informacion consultada del backend
+        setDataRooms(data)
+        
+      } catch (error) {
+        setIsError( error instanceof Error 
+          ? error.message 
+          : 'Error desconocido del servidor' )
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchRooms()
+
+  }, [])
+
 
   return (
     <main className='bg-[#f8f8f6] relative'>
@@ -20,15 +60,17 @@ function ReservationPage() {
           <h1 className='font-bold font-headline mt-2 text-2xl sm:text-4xl md:text-5xl'>Refined living for the discerning traveler.</h1>
         </div>
 
+        {/* ---- Feedback de errores al usuario ----- */}
+        { isError && <ErrorBackend message={isError}/> }
+
         <div className='grid grid-cols-1 gap-14 lg:grid-cols-[2fr_1fr]'>
           <div className='flex flex-col gap-14'>
 
             {/* ---- SECCION DE HABITACIONES ----- */}
             <section className='grid grid-cols-1 gap-12 sm:grid-cols-[1fr_1fr] '>
-              <SuitCard/>
-
-              <SuitCard/>
-
+              { dataRooms 
+              ? dataRooms.map( room => (<SuitCard data={room}/>))
+              : null }
             </section>
 
             {/* ----Seccion de las observaciones ---- */}

@@ -1,7 +1,14 @@
 import habitacion1 from '../../assets/homePage/habitacion2.jpg'
 import { useState } from 'react'
 
-function SuitCard() {
+interface DataRoom {
+    name: string;
+    description: string;
+    price: number;
+    capacity: number;
+}
+
+function SuitCard({ name, description, price, capacity }: DataRoom) {
     const [counter, setCounter] = useState(0)
 
     const hanlderSum = () => {
@@ -18,13 +25,13 @@ function SuitCard() {
           <div className='flex flex-col gap-6'>
             <div className='flex flex-col gap-2'>
                 <div className='flex justify-between'>
-                  <h2 className='text-2xl font-bold'>Azure Studio</h2>
+                  <h2 className='text-2xl font-bold'>{name}</h2>
                   <div className='flex gap-1'>
-                    <span className='text-[#8e6314] font-bold'>$450</span>
-                    <span>/ NIGHT</span>
+                    <span className='text-[#8e6314] font-bold'>${price}</span>
+                    <span>/ NIGHT - {capacity}</span>
                   </div>
                 </div>
-                <span>A minimalist retreat designed for contemplative stillness. Features a private terrace with panoramic sea vistas.</span>
+                <span>{description}</span>
             </div>
             <hr className='bg-[#4A5568]' />
             <div className='flex justify-between items-center'>
