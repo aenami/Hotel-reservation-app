@@ -1,10 +1,17 @@
 import habitacion1 from '../../assets/homePage/habitacion2.jpg'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { Rooms } from '../../types/dataTypes';
+import { useBookingStore } from '../../store/booking';
+import { useShallow } from 'zustand/shallow';
 
 interface DataRoom {
     data: Rooms
 }
+
+// Consumiendo las acciones de nuestra store
+const addRoomType  = useBookingStore.getState().addRoomTypes
+const incrementAmountRoom = useBookingStore.getState().incrementAmountRoom
+const decrementAmountRoom = useBookingStore.getState().decrementAmountRoom
 
 function SuitCard({ data }: DataRoom) {
     const [counter, setCounter] = useState(0)
@@ -17,6 +24,12 @@ function SuitCard({ data }: DataRoom) {
     const handlerRest = () => {
         if(counter > 0) setCounter( (prev) => prev-1)
     }
+
+    useEffect( () =>{
+        if(counter === 0) addRoomType(parseInt(data.id))
+        if(counter > 0 ) incrementAmountRoom(parseInt(data.id))
+    }, [counter])
+
   return (
       <div className='flex flex-col gap-6'>
           <img src={habitacion1} alt="Habitacion1" className="min-w-1/4 max-w-full h-auto rounded-lg" />

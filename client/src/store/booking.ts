@@ -16,7 +16,8 @@ export type State = {
     setDepartureDate: (dateSelected: Date) => void;
     setDepartureTime: (timeSelected: Date) => void;
     addRoomTypes: (idRoom: number) => void;
-    editRoomTypes: (idRoom: number) => void;
+    incrementAmountRoom: (idRoom: number) => void;
+    decrementAmountRoom: (idRoom: number) => void;
 }
 
 export const useBookingStore = create<State>( (set) => ({
@@ -43,7 +44,18 @@ export const useBookingStore = create<State>( (set) => ({
     addRoomTypes: (idRoom) =>
         set( (prev) => ({ roomTypes: [...prev.roomTypes, {roomType: idRoom, amount: 1}] }) ),
 
-    editRoomTypes: (idRoom, operation) =>
-        set( (prev) => ({ roomTypes: [] }))
-    // 1. Encontrar 
+    incrementAmountRoom: (idRoom) =>
+        set( (prev) => ({
+            roomTypes: prev.roomTypes.map(room => 
+                room.roomType === idRoom ? { roomType: room.roomType, amount: room.roomType+1 } : room
+            )
+        })),
+
+    decrementAmountRoom: (idRoom) =>
+        set( (prev) => ({
+            roomTypes: prev.roomTypes.map(room => 
+                room.roomType === idRoom ? { roomType: room.roomType, amount: room.roomType-1 } : room
+            )
+        })),
+    
 }))

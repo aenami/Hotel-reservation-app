@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 import { Header } from '../components/Header';
 import ErrorBackend from '../components/reservationPage/ErrorBackend';
 import type { Rooms } from '../types/dataTypes';
+import { roomTypesService } from '../services/roomTypesService';
 
 function ReservationPage() {
   //const user = tokenManager.getUser();
@@ -20,13 +21,8 @@ function ReservationPage() {
     const fetchRooms = async () => {
       setIsLoading(true)
       try {
-        const res = await fetch('http://localhost:3000/roomTypes')
-        const data = await res.json()
-        // Verificamos si al respuesta que devolvio el servidor fue 2xx u otra distinta
-        if(!res.ok){
-          setIsError(data.message)
-          return
-        }
+        const data = await roomTypesService.getRoomTypes()
+        
         // Seteamos la informacion consultada del backend
         setDataRooms(data.rooms)
         
