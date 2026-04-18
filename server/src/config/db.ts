@@ -23,6 +23,7 @@ export const initializePool = async () => {
             poolMax: parseInt(process.env.DB_POOL_MAX!),
             poolIncrement: parseInt(process.env.DB_POOL_INCREMENT!),
         }
+        
         // Creamos un pool de conexion
         pool = await oracledb.createPool(credentials);
 

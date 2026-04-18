@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { type selectedRoomTypes } from '../types/dataTypes';
 
 export type State = {
     // Estados
@@ -7,11 +8,15 @@ export type State = {
     departureDate: Date | undefined,
     departureTime: Date | undefined,
 
+    roomTypes: selectedRoomTypes[]
+
     // Funciones
     setArrivalDate: (dateSelected: Date) => void;
     setArrivalTime: (timeSelected: Date) => void;
     setDepartureDate: (dateSelected: Date) => void;
     setDepartureTime: (timeSelected: Date) => void;
+    addRoomTypes: (idRoom: number) => void;
+    editRoomTypes: (idRoom: number) => void;
 }
 
 export const useBookingStore = create<State>( (set) => ({
@@ -21,7 +26,9 @@ export const useBookingStore = create<State>( (set) => ({
     departureDate: undefined,
     departureTime: undefined,
 
-    // Funciones para actualizar los estados
+    roomTypes: [],
+
+    // Acciones referentes a la fecha de la reserva
     setArrivalDate: (dateSelected) => 
         set( () => ({ arrivalDate: dateSelected }) ),
     setArrivalTime: (timeSelected) => 
@@ -31,4 +38,12 @@ export const useBookingStore = create<State>( (set) => ({
         set( () => ({ departureDate: dateSelected }) ),
     setDepartureTime: (timeSelected) => 
         set( () => ({ departureTime: timeSelected }) ),
+
+    // Acciones referentes a las habitaciones
+    addRoomTypes: (idRoom) =>
+        set( (prev) => ({ roomTypes: [...prev.roomTypes, {roomType: idRoom, amount: 1}] }) ),
+
+    editRoomTypes: (idRoom, operation) =>
+        set( (prev) => ({ roomTypes: [] }))
+    // 1. Encontrar 
 }))

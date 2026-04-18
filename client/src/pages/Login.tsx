@@ -47,7 +47,7 @@ function Login() {
       }
       // Si llegamos aqui es pq la respuesta fue 2xx
       tokenManager.saveSession(data.token, data.user)
-      navigate('/homePage')
+      navigate('/welcome')
     } catch (error) {
       if (error instanceof Error) {
         setRes({ err: true, message: error.message })

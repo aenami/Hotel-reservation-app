@@ -19,24 +19,8 @@ CREATE TABLE usuario(
 );
 
 
--- 02 RESERVA
-CREATE TABLE reserva(
-    id_reserva NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    checkin_reserva DATE,
-    checkout_reserva DATE,
-    estado_reserva VARCHAR(20),
-    observaciones_reserva VARCHAR(300),
 
-    id_titular_reserva NUMBER,
-
-    -- RESTRICCIONES
-    CONSTRAINT chk_estado_reserva CHECK(estado_reserva IN ('AGENDADA', 'EN CURSO', 'CANCELADA', 'FINALIZADA')),
-
-    -- RELACIONES
-    CONSTRAINT fk_id_titular_reserva FOREIGN KEY (id_titular_reserva) REFERENCES usuario(id_usuario)
-);
-
--- 03 TIPO DE HABITACION
+-- 02 TIPO DE HABITACION
 CREATE TABLE tipoHabitacion(
     id_tipoHabitacion NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     nombre_tipoHabitacion VARCHAR(40) NOT NULL,
@@ -52,6 +36,24 @@ CREATE TABLE tipoHabitacion(
 -----------------------------
 -- ------COMPLEX TABLES------
 -----------------------------
+
+-- 03 RESERVA
+CREATE TABLE reserva(
+    id_reserva NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    checkin_reserva DATE NOT NULL,
+    checkout_reserva DATE NOT NULL,
+    estado_reserva VARCHAR(20) DEFAULT 'AGENDADA' NOT NULL,
+    observaciones_reserva VARCHAR(300),
+
+    id_titular_reserva NUMBER,
+
+    -- RESTRICCIONES
+    CONSTRAINT chk_estado_reserva CHECK(estado_reserva IN ('AGENDADA', 'EN CURSO', 'CANCELADA', 'FINALIZADA')),
+
+    -- RELACIONES
+    CONSTRAINT fk_id_titular_reserva FOREIGN KEY (id_titular_reserva) REFERENCES usuario(id_usuario)
+);
+
 -- 04 ACOMPAÑANTE
 CREATE TABLE acompanante(
     id_acompanante NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -73,8 +75,8 @@ CREATE TABLE factura(
     id_factura NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     fecha_pago_factura DATE,
     monto_factura NUMBER(10,2) NOT NULL,
-    estado_pago_factura VARCHAR(20) NOT NULL,
-    metodo_pago_factura VARCHAR(20),
+    estado_pago_factura VARCHAR(20) DEFAULT 'PENDIENTE' NOT NULL,
+    metodo_pago_factura VARCHAR(20) NOT NULL,
 
     id_reserva_factura NUMBER NOT NULL,
 

@@ -4,3 +4,8 @@ export type Rooms = {
   price: number;
   capacity: number;
 }
+
+export type selectedRoomTypes = {
+  roomType: number,
+  amount: number,
+}
