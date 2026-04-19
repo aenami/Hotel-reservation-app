@@ -1,15 +1,28 @@
 import SelectedRoom from "./Summary/SelectedRoom";
 import { useBookingStore } from "../../store/booking";
+import { useState } from "react";
+import VerifyReservation from "./Summary/VerifyReservation";
 
 type propsResumeReserv = {
 	modal: () => void;
 }
 
 function ResumReservation({ modal }: propsResumeReserv) {
+	const [error, setError] = useState(false)
 	const roomTypes = useBookingStore(state => state.roomTypes)
+	let totalAmount = 0;
+	for (const room of roomTypes) {
+		totalAmount = totalAmount + room.price * room.amount
+	}
 
 	const confirmReservation = () => {
-		modal()
+		if(roomTypes.length > 0){
+			setError(false)
+			modal()
+		}else{
+			setError(true)
+		}
+		
 	}
 
 	return (
@@ -18,18 +31,19 @@ function ResumReservation({ modal }: propsResumeReserv) {
 				<h2 className="font-bold font-headline text-2xl">Reservation summary</h2>
 
 				<div className="flex flex-col gap-6">
-					{roomTypes.map(room => room.amount > 0 ? <SelectedRoom dataTypeRoom={room}/> : null )}
+					{roomTypes.map(room => room.amount > 0 ? <SelectedRoom key={room.roomType} dataTypeRoom={room}/> : null )}
 				</div>
 
 				<hr />
 
 				<div className="flex justify-between">
-					<h3>Total Amount</h3>
-					<h1 className="font-bold text-3xl">$1,380</h1>
+					<h3>Total Amount </h3>
+					<h1 className="font-bold text-2xl">${totalAmount}</h1>
 				</div>
 
 				<button onClick={confirmReservation}
 				className="bg-black rounded-sm px-10 py-4 text-white cursor-pointer">COMPLETE RESERVATIONS</button>
+				{error && <VerifyReservation/>}
 			</div>
 		</aside>
 	);

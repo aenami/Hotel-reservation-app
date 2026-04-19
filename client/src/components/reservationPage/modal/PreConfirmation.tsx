@@ -1,5 +1,8 @@
 import { motion } from "framer-motion";
-import { Bed, Calendar, Users } from "lucide-react";
+import { Bed, Calendar } from "lucide-react";
+import { useBookingStore } from "../../../store/booking";
+import { type selectedRoomTypes } from "../../../types/dataTypes";
+import dayjs from "dayjs";
 
 type modalProps = {
 	onclose: () => void;
@@ -64,7 +67,11 @@ const ModalHeader = () => (
 	</header>
 );
 
-const ModalSuiteInfo = () => (
+type typeRooms = {
+	dataRoom: selectedRoomTypes,
+}
+
+const ModalSuiteInfo = ({dataRoom}: typeRooms) => (
 	<motion.div
 		initial={{ opacity: 0, y: 10 }}
 		animate={{ opacity: 1, y: 0 }}
@@ -80,55 +87,69 @@ const ModalSuiteInfo = () => (
 		</div>
 		<div>
 			<h3 className="font-serif text-lg text-neutral-900">
-				Royal Ocean Suite
+				{dataRoom.name}
 			</h3>
 			<p className="font-sans text-xs text-neutral-500 mt-0.5">
-				Sanctuary Alpha Wing • Floor 12
+				Sanctuary Alpha Wing 
 			</p>
 		</div>
 	</motion.div>
 );
 
-const ModalPriceBreakDown = () => (
-	<motion.div
-		initial={{ opacity: 0, y: 10 }}
-		animate={{ opacity: 1, y: 0 }}
-		transition={{ delay: 0.6 }}
-		className="space-y-3 pt-6 border-t border-neutral-100"
-	>
-		<div className="flex justify-between items-center text-xs">
-			<span className="text-neutral-500">
-				7 Nights @ $1,200.00
-			</span>
-			<span className="font-medium text-neutral-900">
-				$8,400.00
-			</span>
-		</div>
-		<div className="flex justify-between items-center text-xs">
-			<span className="text-neutral-500">
-				Resort Fees & Taxes (15%)
-			</span>
-			<span className="font-medium text-neutral-900">
-				$1,260.00
-			</span>
-		</div>
+const ModalPriceBreakDown = () => {
+	const arrivalDate = dayjs(useBookingStore(state => state.arrivalDate))
+	const departureDate = dayjs(useBookingStore(state => state.departureDate))
+	const nights = departureDate.startOf('day').diff(arrivalDate.startOf('day'), 'day') +1
+	const roomTypes = useBookingStore(state => state.roomTypes)
 
-		{/* Total */}
-		<div className="flex justify-between items-end pt-4 mt-1 border-t border-neutral-100">
-			<div className="space-y-0.5">
-				<p className="font-sans text-[0.6rem] uppercase tracking-[0.15em] font-bold text-neutral-900">
-					Total Amount
-				</p>
-				<p className="text-[0.55rem] text-neutral-400 italic">
-					Inclusive of all taxes
-				</p>
+	let subTotal = 0;
+	for (const room of roomTypes) {
+		subTotal = subTotal + room.price * room.amount
+	}
+
+	const taxes = subTotal*0.15;
+	return (
+		<motion.div
+			initial={{ opacity: 0, y: 10 }}
+			animate={{ opacity: 1, y: 0 }}
+			transition={{ delay: 0.6 }}
+			className="space-y-3 border-t border-neutral-100"
+		>
+			<div className="flex justify-between items-center text-xs">
+				<span className="text-neutral-500">
+					{nights} Nights 
+				</span>
+				<span className="font-medium text-neutral-900">
+					${subTotal}
+				</span>
 			</div>
-			<span className="font-serif text-2xl text-neutral-900">
-				$9,660.00
-			</span>
-		</div>
-	</motion.div>
-)
+			<div className="flex justify-between items-center text-xs">
+				<span className="text-neutral-500">
+					Resort Fees & Taxes (15%)
+				</span>
+				<span className="font-medium text-neutral-900">
+					${taxes}
+				</span>
+			</div>
+
+			{/* Total */}
+			<div className="flex justify-between items-end pt-4 mt-1 border-t border-neutral-100">
+				<div className="space-y-0.5">
+					<p className="font-sans text-[0.6rem] uppercase tracking-[0.15em] font-bold text-neutral-900">
+						Total Amount
+					</p>
+					<p className="text-[0.55rem] text-neutral-400 italic">
+						Inclusive of all taxes
+					</p>
+				</div>
+				<span className="font-serif text-2xl text-neutral-900">
+					${subTotal + taxes}
+				</span>
+			</div>
+		</motion.div>
+	)
+}
+
 
 type footerProps = {
 	onclose: () => void;
@@ -166,7 +187,7 @@ const ModalFooter = ({ onclose, setStep }: footerProps) => {
 			<div className="flex items-center justify-center md:justify-start gap-2">
 				<div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
 				<p className="font-sans text-[0.55rem] uppercase tracking-widest text-emerald-600 font-bold">
-					Free cancellation before Oct 17, 2024.
+					Free cancellation one day before the selected check-in date
 				</p>
 			</div>
 		</motion.div>
@@ -174,7 +195,13 @@ const ModalFooter = ({ onclose, setStep }: footerProps) => {
 }
 
 function PreConfirmation({ onclose, setStep }: modalProps) {
-	//const [isOpen, setIsOpen] = useState(true);
+	const arrivalDate = dayjs(useBookingStore(state => state.arrivalDate))
+	const departureDate = dayjs(useBookingStore(state => state.departureDate))
+	const roomTypes = useBookingStore(state => state.roomTypes)
+
+	const arrivalMonth =  dayjs().month(arrivalDate.month()+1).format('MMMM')
+	const departureMonth = dayjs().month(departureDate.month()+1).format('MMMM')
+	const year = arrivalDate.year()
 
 	return (
 		<motion.div
@@ -196,9 +223,7 @@ function PreConfirmation({ onclose, setStep }: modalProps) {
 
 					{/* Suite Info */}
 					<div className="flex flex-wrap gap-4">
-						<ModalSuiteInfo />
-						<ModalSuiteInfo />
-						<ModalSuiteInfo />
+						{roomTypes.map(room => room.amount > 0 ? <ModalSuiteInfo dataRoom={room} />:null)}
 					</div>
 
 					{/* Dates & Guests Grid */}
@@ -206,7 +231,7 @@ function PreConfirmation({ onclose, setStep }: modalProps) {
 						initial={{ opacity: 0, y: 10 }}
 						animate={{ opacity: 1, y: 0 }}
 						transition={{ delay: 0.5 }}
-						className="grid grid-cols-2 gap-6 py-6 border-t border-neutral-100"
+						className="grid grid-cols-2 gap-6 py-4 border-t border-neutral-100"
 					>
 						<div className="space-y-1">
 							<p className="font-sans text-[0.55rem] uppercase tracking-[0.15em] text-neutral-400 font-bold">
@@ -218,21 +243,7 @@ function PreConfirmation({ onclose, setStep }: modalProps) {
 									className="text-neutral-400"
 								/>
 								<p className="font-sans text-xs md:text-sm font-medium">
-									Oct 24 — Oct 31, 2024
-								</p>
-							</div>
-						</div>
-						<div className="space-y-1">
-							<p className="font-sans text-[0.55rem] uppercase tracking-[0.15em] text-neutral-400 font-bold">
-								Guests
-							</p>
-							<div className="flex items-center gap-2 text-neutral-800">
-								<Users
-									size={12}
-									className="text-neutral-400"
-								/>
-								<p className="font-sans text-xs md:text-sm font-medium">
-									2 Adults
+									{arrivalMonth} {arrivalDate.day()} -  {departureMonth} {departureDate.day()}, {year}
 								</p>
 							</div>
 						</div>

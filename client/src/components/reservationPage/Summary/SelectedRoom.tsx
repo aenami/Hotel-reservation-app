@@ -11,7 +11,7 @@ function SelectedRoom({dataTypeRoom}: typeRoom) {
                 <h3 className="font-bold">{dataTypeRoom.name}</h3>
                 <span className="">{dataTypeRoom.amount} x ${dataTypeRoom.price} / NIGHT</span>
             </div>
-            <span className="font-bold">{dataTypeRoom.amount*dataTypeRoom.price}</span>
+            <span className="font-bold">${dataTypeRoom.amount*dataTypeRoom.price}</span>
         </div >
     )
 }

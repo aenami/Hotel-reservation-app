@@ -10,7 +10,6 @@ function ConfirmationModal({ onClose }: modalProps) {
     // Estado que llevara el orden de los modales
     const [step, setStep] = useState(1);
 
-
     // Use effect para desactivar el scroll de la pagina cuando el componente se monte
     useEffect( () => {
         document.body.style.overflow = "hidden";
