@@ -15,8 +15,7 @@ export type State = {
     setArrivalTime: (timeSelected: Date) => void;
     setDepartureDate: (dateSelected: Date) => void;
     setDepartureTime: (timeSelected: Date) => void;
-    addRoomTypes: (idRoom: number) => void;
-    incrementAmountRoom: (idRoom: number) => void;
+    incrementAmountRoom: (idRoom: number, name: string, price: number) => void;
     decrementAmountRoom: (idRoom: number) => void;
 }
 
@@ -41,21 +40,25 @@ export const useBookingStore = create<State>( (set) => ({
         set( () => ({ departureTime: timeSelected }) ),
 
     // Acciones referentes a las habitaciones
-    addRoomTypes: (idRoom) =>
-        set( (prev) => ({ roomTypes: [...prev.roomTypes, {roomType: idRoom, amount: 1}] }) ),
+    // Funcion que se encargara de sumar cantidad a la habitacion y añadirla a la lista si es la primera vez
+    incrementAmountRoom: (idRoom, name, price) =>  
+        set( prev => {
+            let foundRoom = false;
+            for (const room of prev.roomTypes) {
+                // Verificamos si se encuentra o no el tipo de habitacion
+                if(room.roomType === idRoom) foundRoom = true
+            }
 
-    incrementAmountRoom: (idRoom) =>
-        set( (prev) => ({
-            roomTypes: prev.roomTypes.map(room => 
-                room.roomType === idRoom ? { roomType: room.roomType, amount: room.roomType+1 } : room
-            )
-        })),
+            if(foundRoom){
+                return {roomTypes: prev.roomTypes.map(room => room.roomType === idRoom ? {...room, amount: room.amount+1 } : room)} 
+            }
 
-    decrementAmountRoom: (idRoom) =>
-        set( (prev) => ({
-            roomTypes: prev.roomTypes.map(room => 
-                room.roomType === idRoom ? { roomType: room.roomType, amount: room.roomType-1 } : room
-            )
-        })),
+            const newRoomTypes = prev.roomTypes.map(room => room)
+            newRoomTypes.push({roomType: idRoom, amount:1, name, price})
+            return { roomTypes: newRoomTypes }  
+
+        }),
     
+    decrementAmountRoom: (idRoom) =>
+        set( prev => ({roomTypes: prev.roomTypes.map(room => room.roomType === idRoom ? {...room, amount: room.amount-1 } : room)}))     
 }))

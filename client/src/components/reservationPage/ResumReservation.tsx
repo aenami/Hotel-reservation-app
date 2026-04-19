@@ -1,10 +1,12 @@
 import SelectedRoom from "./Summary/SelectedRoom";
+import { useBookingStore } from "../../store/booking";
 
 type propsResumeReserv = {
 	modal: () => void;
 }
 
 function ResumReservation({ modal }: propsResumeReserv) {
+	const roomTypes = useBookingStore(state => state.roomTypes)
 
 	const confirmReservation = () => {
 		modal()
@@ -16,8 +18,7 @@ function ResumReservation({ modal }: propsResumeReserv) {
 				<h2 className="font-bold font-headline text-2xl">Reservation summary</h2>
 
 				<div className="flex flex-col gap-6">
-					<SelectedRoom/>
-					<SelectedRoom/>
+					{roomTypes.map(room => room.amount > 0 ? <SelectedRoom dataTypeRoom={room}/> : null )}
 				</div>
 
 				<hr />

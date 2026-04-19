@@ -1,5 +1,5 @@
 export type Rooms = {
-  id: string;
+  id: number;
   name: string;
   price: number;
   capacity: number;
@@ -8,4 +8,6 @@ export type Rooms = {
 export type selectedRoomTypes = {
   roomType: number,
   amount: number,
+  name: string,
+  price: number,
 }
