@@ -33,9 +33,9 @@ CREATE TABLE tipoHabitacion(
     CONSTRAINT chk_capacidad_positiva CHECK (capacidad_tipoHabitacion > 0)
 );
 
------------------------------
+-- --------------------------
 -- ------COMPLEX TABLES------
------------------------------
+-- --------------------------
 
 -- 03 RESERVA
 CREATE TABLE reserva(

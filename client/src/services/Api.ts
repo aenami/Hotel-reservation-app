@@ -20,8 +20,8 @@ const handleResponse = async (response: Response) => {
     if (!response.ok) {
         // Si el token expiró, limpiar sesión
         if (response.status === 401) {
-        localStorage.removeItem("auth_token");
-        window.location.href = "/login"; // o usa tu router
+            localStorage.removeItem("auth_token");
+            window.location.href = "/login";
         }
 
         const error = await response.json().catch(() => ({}));

@@ -1,8 +1,10 @@
 import { motion } from "framer-motion";
 import { Bed, Calendar } from "lucide-react";
 import { useBookingStore } from "../../../store/booking";
+import { useShallow } from "zustand/shallow";
 import { type selectedRoomTypes } from "../../../types/dataTypes";
 import dayjs from "dayjs";
+import { reservationService } from "../../../services/reservationService";
 
 type modalProps = {
 	onclose: () => void;
@@ -157,9 +159,41 @@ type footerProps = {
 }
 
 const ModalFooter = ({ onclose, setStep }: footerProps) => {
+	const [arrivalDate, arrivalTime, departureDate, departureTime, roomTypes] = useBookingStore(useShallow(state => [state.arrivalDate, state.arrivalTime, state.departureDate, state.departureTime, state.roomTypes]))
+
+	const arrivalDateComplete = new Date(dayjs(arrivalDate)
+	.set('hour', dayjs(arrivalTime).hour())
+	.set("minute", dayjs(arrivalTime).minute())
+  	.set("second", dayjs(arrivalTime).second())
+  	.toDate());
+
+	const departureDateComplete = new Date(dayjs(departureDate)
+	.set('hour', dayjs(departureTime).hour())
+	.set("minute", dayjs(departureTime).minute())
+  	.set("second", dayjs(departureTime).second())
+  	.toDate());
 
 	const handlerConfirmation = () => {
-		setStep();
+		//1. Usar el servicio para insertar la booking
+		try {
+			// Creamos el payload
+			const payload = {
+				arrivalDate: arrivalDateComplete,
+				departureDate: departureDateComplete,
+				rooms: roomTypes,
+			}
+
+			reservationService.insertBooking(payload)
+		} catch (error) {
+			if(error instanceof Error) {
+				console.log(error.message)
+			}else{
+				console.log('Error desconocido al insertar la reserva')
+			}
+		} finally {
+			setStep();
+		}
+		
 	};
 
 	return (
