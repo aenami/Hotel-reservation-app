@@ -6,6 +6,7 @@ import ReservationPage from './pages/ReservationPage'
 import WelcomePage from './pages/WelcomePage'
 import { useLocation } from 'react-router'
 import { useEffect } from 'react'
+import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -28,8 +29,10 @@ function App() {
         <Route path='/landingPage' element={ <h1>Bienveinod  A LA LANDING PAGE</h1>} />
 
         {/* --- Rutas protegidas ---- */}
-        <Route path='/welcome' element={ <WelcomePage/> } />
-        <Route path='/reservation' element={ <ReservationPage/> } />
+        <Route element={<ProtectedRoute/>}>
+          <Route path='/welcome' element={ <WelcomePage/> } />
+          <Route path='/reservation' element={ <ReservationPage/> } />
+        </Route>
 
         {/* --- RUTA POR DEFECTO --- */}
         <Route path='/' element={ <Login/> } />

@@ -12,6 +12,7 @@ import { validateBooking } from '../utils/validateBooking';
 import Error from '../components/welcomePage/Error';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
+import { tokenManager } from '../utils/tokenManager';
 
 // Acciones que nunca van a cambiar
 const setDepartureDate = useBookingStore.getState().setDepartureDate
@@ -19,6 +20,8 @@ const setDepartureTime = useBookingStore.getState().setDepartureTime
 
 const setArrivalDate = useBookingStore.getState().setArrivalDate
 const setArrivalTime = useBookingStore.getState().setArrivalTime
+
+const user = tokenManager.getUser()
 
 const timePresets = ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00'];
 
@@ -211,7 +214,7 @@ function WelcomePage() {
       <div className="min-h-screen bg-surface selection:bg-secondary/20">
         
         {/* HEADER */}
-        <Header/>
+        <Header name={user.nombre}/>
 
         <main className="relative min-h-screen flex flex-col lg:flex-row">
           
@@ -228,7 +231,7 @@ function WelcomePage() {
               </span>
               
               <h2 className="font-headline text-5xl lg:text-7xl leading-[1.1] tracking-tight mb-12">
-                Welcome back, Julian.<br />
+                Welcome back, {user.nombre}.<br />
                 <span className="italic text-secondary font-light">Your sanctuary awaits.</span>
               </h2>
 
@@ -272,9 +275,6 @@ function WelcomePage() {
                 <p className="text-on-surface-variant text-sm leading-relaxed mb-6">
                   Enjoy complimentary concierge airport transfers for all Reserve members this season.
                 </p>
-                <a href="#" className="inline-block text-[10px] font-bold uppercase tracking-[0.2em] text-secondary border-b border-secondary/30 pb-1 hover:text-secondary/70 transition-colors">
-                  Learn More
-                </a>
               </motion.div>
             </motion.div>
           </section>

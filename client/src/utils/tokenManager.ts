@@ -34,7 +34,19 @@ export const tokenManager = {
 
     //5. Funcion que se encargara de verificar la autenticidad del usuario (minimamente)
     isAuthenticated(){
-        return !!localStorage.getItem(TOKEN_KEY); // Doble negacion. Recordar que un string es considerado verdadero
+        const token = localStorage.getItem(TOKEN_KEY); 
+        if (!token) return false;
+
+        try {
+            // Decodifica el payload (segunda parte del JWT)
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            
+            // Verifica expiración
+            const isExpired = payload.exp * 1000 < Date.now();
+            return !isExpired;
+        } catch {
+            return false; // Token malformado
+        }
     }
     
 

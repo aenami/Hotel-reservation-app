@@ -1,5 +1,5 @@
 
-export function Header() {
+export function Header(props: {name: string}) {
   return (
     <header className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-lg flex justify-between items-center px-8 h-20">
       <div className="flex items-center gap-6">
@@ -15,7 +15,7 @@ export function Header() {
 
       <div className="flex items-center gap-8">
         <span className="hidden sm:inline font-serif text-lg tracking-tight text-on-surface-variant">
-          Welcome, Julian
+          Welcome, {props.name}
         </span>
         <button className="text-on-surface-variant/60 hover:text-secondary transition-colors text-[10px] uppercase font-bold">
           Log Out

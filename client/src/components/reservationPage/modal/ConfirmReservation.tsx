@@ -1,12 +1,13 @@
 import { motion } from "framer-motion";
 import { CheckCircle2, ArrowRight } from "lucide-react";
+import { tokenManager } from "../../../utils/tokenManager";
 
 type modalProps = {
 	onclose: () => void;
 };
 
 
-const ModalHeader = ()=> (
+const ModalHeader = (props: {name: string})=> (
 	<div className="space-y-4 mb-10">
 		<motion.span
 			initial={{ opacity: 0, y: 10 }}
@@ -32,7 +33,7 @@ const ModalHeader = ()=> (
 			transition={{ delay: 0.6 }}
 			className="font-headline italic text-xl md:text-xl text-on-surface-variant font-light leading-relaxed"
 		>
-			Your sanctuary has been reserved, Julian.
+			Your sanctuary has been reserved, {props.name}.
 		</motion.p>
 	</div>
 )
@@ -78,6 +79,8 @@ const ReservationDetails = () => (
 )
 
 function ConfirmReservation({ onclose }: modalProps) {
+	const user = tokenManager.getUser()
+
 	return (
 		<motion.div
 			initial={{ opacity: 0, y: 20, scale: 0.95 }}
@@ -101,7 +104,7 @@ function ConfirmReservation({ onclose }: modalProps) {
 			</motion.div>
 
 			{/* Header Section */}
-			<ModalHeader/>
+			<ModalHeader name={user.nombre}/>
 
 			{/* Reservation Details Box */}
 			<ReservationDetails/>

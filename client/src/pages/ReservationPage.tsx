@@ -9,9 +9,10 @@ import ErrorBackend from '../components/reservationPage/ErrorBackend';
 import type { Rooms } from '../types/dataTypes';
 import { roomTypesService } from '../services/roomTypesService';
 import { useBookingStore } from '../store/booking';
+import { tokenManager } from '../utils/tokenManager';
 
 function ReservationPage() {
-  //const user = tokenManager.getUser();
+  const user = tokenManager.getUser();
   const setReservationComment = useBookingStore(state => state.setComments)
   const [visibleModal, setVisibileModal] = useState(false)
   const [isError, setIsError] = useState('')
@@ -45,7 +46,7 @@ function ReservationPage() {
 
   return (
     <main className='bg-[#f8f8f6] relative'>
-      <Header/>
+      <Header name={user.nombre}/>
       
       <section className='flex flex-col gap-14 py-4 px-12 '>
         <div className='flex flex-col max-w-180'>
