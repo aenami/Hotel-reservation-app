@@ -8,18 +8,18 @@ import { Header } from '../components/Header';
 import ErrorBackend from '../components/reservationPage/ErrorBackend';
 import type { Rooms } from '../types/dataTypes';
 import { roomTypesService } from '../services/roomTypesService';
+import { useBookingStore } from '../store/booking';
 
 function ReservationPage() {
   //const user = tokenManager.getUser();
+  const setReservationComment = useBookingStore(state => state.setComments)
   const [visibleModal, setVisibileModal] = useState(false)
   const [isError, setIsError] = useState('')
   const [dataRooms, setDataRooms] = useState<Rooms[] | undefined>(undefined)
-  const [isLoading, setIsLoading] = useState(false)
 
   // useEffect que se encarga de traer la informacion de las habitaciones a mostrar
   useEffect(  () =>{
     const fetchRooms = async () => {
-      setIsLoading(true)
       try {
         const data = await roomTypesService.getRoomTypes()
         
@@ -30,15 +30,18 @@ function ReservationPage() {
         setIsError( error instanceof Error 
           ? error.message 
           : 'Error desconocido del servidor' )
-      } finally {
-        setIsLoading(false)
-      }
+      } 
     }
 
     fetchRooms()
 
   }, [])
 
+  const hanlderComment = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const comment = e.target.value;
+    setReservationComment(comment)
+    console.log(comment)
+  }
 
   return (
     <main className='bg-[#f8f8f6] relative'>
@@ -67,7 +70,9 @@ function ReservationPage() {
             <section className='flex flex-col gap-6 text-sm'>
               <h2 className='font-bold font-headline text-3xl'>Reservation Details</h2>
               <span className='text-base '>Additional comments or special requests</span>
-              <textarea name="" id="observations" placeholder='Let us know how we can make your sanctuary truly bestpoke' className='bg-surface-low h-40 rounded-lg ring-[#2563eb] focus:ring-1 p-6'></textarea>
+              <textarea name="" id="observations" onChange={hanlderComment}
+              placeholder='Let us know how we can make your sanctuary truly bestpoke' 
+              className='bg-surface-low h-40 rounded-lg ring-[#2563eb] focus:ring-1 p-6'></textarea>
               <span>We will review these details to acurate your stay</span>
             </section>
 

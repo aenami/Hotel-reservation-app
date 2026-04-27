@@ -4,12 +4,28 @@ import { useBookingStore } from "../../../store/booking";
 import { useShallow } from "zustand/shallow";
 import { type selectedRoomTypes } from "../../../types/dataTypes";
 import dayjs from "dayjs";
+import { type Dayjs } from "dayjs";
 import { reservationService } from "../../../services/reservationService";
 
 type modalProps = {
 	onclose: () => void;
 	setStep: () => void;
 };
+
+type bookingData = {
+	arrivalDate: Dayjs;
+	departureDate: Dayjs;
+	rooms: selectedRoomTypes[];
+}
+
+type footerProps = {
+	onclose: () => void;
+	setStep: () => void;
+}
+
+type typeRooms = {
+	dataRoom: selectedRoomTypes,
+}
 
 //---------------------PARTES DEL MODAL-------------------
 const LeftSideModal = () => (
@@ -69,10 +85,6 @@ const ModalHeader = () => (
 	</header>
 );
 
-type typeRooms = {
-	dataRoom: selectedRoomTypes,
-}
-
 const ModalSuiteInfo = ({dataRoom}: typeRooms) => (
 	<motion.div
 		initial={{ opacity: 0, y: 10 }}
@@ -98,14 +110,11 @@ const ModalSuiteInfo = ({dataRoom}: typeRooms) => (
 	</motion.div>
 );
 
-const ModalPriceBreakDown = () => {
-	const arrivalDate = dayjs(useBookingStore(state => state.arrivalDate))
-	const departureDate = dayjs(useBookingStore(state => state.departureDate))
+const ModalPriceBreakDown = ({arrivalDate, departureDate, rooms}:bookingData) => {
 	const nights = departureDate.startOf('day').diff(arrivalDate.startOf('day'), 'day') +1
-	const roomTypes = useBookingStore(state => state.roomTypes)
 
 	let subTotal = 0;
-	for (const room of roomTypes) {
+	for (const room of rooms) {
 		subTotal = subTotal + room.price * room.amount
 	}
 
@@ -152,14 +161,8 @@ const ModalPriceBreakDown = () => {
 	)
 }
 
-
-type footerProps = {
-	onclose: () => void;
-	setStep: () => void;
-}
-
 const ModalFooter = ({ onclose, setStep }: footerProps) => {
-	const [arrivalDate, arrivalTime, departureDate, departureTime, roomTypes] = useBookingStore(useShallow(state => [state.arrivalDate, state.arrivalTime, state.departureDate, state.departureTime, state.roomTypes]))
+	const [arrivalDate, arrivalTime, departureDate, departureTime, roomTypes, comments] = useBookingStore(useShallow(state => [state.arrivalDate, state.arrivalTime, state.departureDate, state.departureTime, state.roomTypes, state.comments]))
 
 	const arrivalDateComplete = new Date(dayjs(arrivalDate)
 	.set('hour', dayjs(arrivalTime).hour())
@@ -181,6 +184,7 @@ const ModalFooter = ({ onclose, setStep }: footerProps) => {
 				arrivalDate: arrivalDateComplete,
 				departureDate: departureDateComplete,
 				rooms: roomTypes,
+				comments,
 			}
 
 			reservationService.insertBooking(payload)
@@ -284,7 +288,7 @@ function PreConfirmation({ onclose, setStep }: modalProps) {
 					</motion.div>
 
 					{/* Price Breakdown */}
-					<ModalPriceBreakDown />
+					<ModalPriceBreakDown arrivalDate={arrivalDate} departureDate={departureDate} rooms={roomTypes}/>
 				</div>
 
 				{/* Footer Actions */}

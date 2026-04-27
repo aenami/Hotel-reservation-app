@@ -1,7 +1,7 @@
-import habitacion1 from '../../assets/homePage/habitacion2.jpg'
 import { useState } from 'react'
 import type { Rooms } from '../../types/dataTypes';
 import { useBookingStore } from '../../store/booking';
+import { roomImages } from '../../utils/mapRoomsImages';
 
 interface DataRoom {
     data: Rooms
@@ -13,6 +13,7 @@ const decrementAmountRoom = useBookingStore.getState().decrementAmountRoom
 
 function SuitCard({ data }: DataRoom) {
     const [counter, setCounter] = useState(0)
+    const urlImg = roomImages[data.name.toLowerCase()]
 
     const hanlderSum = () => {
         incrementAmountRoom(data.id, data.name, data.price)
@@ -29,7 +30,7 @@ function SuitCard({ data }: DataRoom) {
 
   return (
       <div className='flex flex-col gap-6'>
-          <img src={habitacion1} alt="Habitacion1" className="min-w-1/4 max-w-full h-auto rounded-lg" />
+          <img src={urlImg} alt="Habitacion1" className="min-w-1/4 max-w-full h-auto rounded-lg" />
           <div className='flex flex-col gap-6'>
             <div className='flex flex-col gap-2'>
                 <div className='flex justify-between'>

@@ -77,7 +77,6 @@ const ReservationDetails = () => (
 
 )
 
-
 function ConfirmReservation({ onclose }: modalProps) {
 	return (
 		<motion.div

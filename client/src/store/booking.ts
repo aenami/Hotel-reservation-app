@@ -9,6 +9,7 @@ export type State = {
     departureTime: Date | undefined,
 
     roomTypes: selectedRoomTypes[]
+    comments: string | undefined;
 
     // Funciones
     setArrivalDate: (dateSelected: Date) => void;
@@ -17,6 +18,7 @@ export type State = {
     setDepartureTime: (timeSelected: Date) => void;
     incrementAmountRoom: (idRoom: number, name: string, price: number) => void;
     decrementAmountRoom: (idRoom: number) => void;
+    setComments: (comments: string) => void;
 }
 
 export const useBookingStore = create<State>( (set) => ({
@@ -27,6 +29,7 @@ export const useBookingStore = create<State>( (set) => ({
     departureTime: undefined,
 
     roomTypes: [],
+    comments: undefined,
 
     // Acciones referentes a la fecha de la reserva
     setArrivalDate: (dateSelected) => 
@@ -60,5 +63,7 @@ export const useBookingStore = create<State>( (set) => ({
         }),
     
     decrementAmountRoom: (idRoom) =>
-        set( prev => ({roomTypes: prev.roomTypes.map(room => room.roomType === idRoom ? {...room, amount: room.amount-1 } : room)}))     
+        set( prev => ({roomTypes: prev.roomTypes.map(room => room.roomType === idRoom ? {...room, amount: room.amount-1 } : room)})),
+    
+    setComments: (comments) => set( () => ({comments})),
 }))
