@@ -6,10 +6,12 @@ import { type selectedRoomTypes } from "../../../types/dataTypes";
 import dayjs from "dayjs";
 import { type Dayjs } from "dayjs";
 import { reservationService } from "../../../services/reservationService";
+import { tokenManager } from "../../../utils/tokenManager";
 
 type modalProps = {
 	onclose: () => void;
 	setStep: () => void;
+	setIdReservation: (id: string) => void;
 };
 
 type bookingData = {
@@ -21,6 +23,7 @@ type bookingData = {
 type footerProps = {
 	onclose: () => void;
 	setStep: () => void;
+	setIdReservation: (id:string) => void; 
 }
 
 type typeRooms = {
@@ -161,7 +164,8 @@ const ModalPriceBreakDown = ({arrivalDate, departureDate, rooms}:bookingData) =>
 	)
 }
 
-const ModalFooter = ({ onclose, setStep }: footerProps) => {
+const ModalFooter = ({ onclose, setStep, setIdReservation}: footerProps) => {
+	const user = tokenManager.getUser()
 	const [arrivalDate, arrivalTime, departureDate, departureTime, roomTypes, comments] = useBookingStore(useShallow(state => [state.arrivalDate, state.arrivalTime, state.departureDate, state.departureTime, state.roomTypes, state.comments]))
 
 	const arrivalDateComplete = new Date(dayjs(arrivalDate)
@@ -176,7 +180,7 @@ const ModalFooter = ({ onclose, setStep }: footerProps) => {
   	.set("second", dayjs(departureTime).second())
   	.toDate());
 
-	const handlerConfirmation = () => {
+	const handlerConfirmation = async () => {
 		//1. Usar el servicio para insertar la booking
 		try {
 			// Creamos el payload
@@ -185,9 +189,11 @@ const ModalFooter = ({ onclose, setStep }: footerProps) => {
 				departureDate: departureDateComplete,
 				rooms: roomTypes,
 				comments,
+				idUser: parseInt(user.id),
 			}
 
-			reservationService.insertBooking(payload)
+			const data = await reservationService.insertBooking(payload)
+			setIdReservation(data.id)
 		} catch (error) {
 			if(error instanceof Error) {
 				console.log(error.message)
@@ -232,7 +238,7 @@ const ModalFooter = ({ onclose, setStep }: footerProps) => {
 	)
 }
 
-function PreConfirmation({ onclose, setStep }: modalProps) {
+function PreConfirmation({ onclose, setStep, setIdReservation }: modalProps) {
 	const arrivalDate = dayjs(useBookingStore(state => state.arrivalDate))
 	const departureDate = dayjs(useBookingStore(state => state.departureDate))
 	const roomTypes = useBookingStore(state => state.roomTypes)
@@ -261,7 +267,7 @@ function PreConfirmation({ onclose, setStep }: modalProps) {
 
 					{/* Suite Info */}
 					<div className="flex flex-wrap gap-4">
-						{roomTypes.map(room => room.amount > 0 ? <ModalSuiteInfo dataRoom={room} />:null)}
+						{roomTypes.map(room => room.amount > 0 ? <ModalSuiteInfo key={room.name} dataRoom={room} />:null)}
 					</div>
 
 					{/* Dates & Guests Grid */}
@@ -292,7 +298,7 @@ function PreConfirmation({ onclose, setStep }: modalProps) {
 				</div>
 
 				{/* Footer Actions */}
-				<ModalFooter onclose={onclose} setStep={setStep}/>
+				<ModalFooter onclose={onclose} setStep={setStep} setIdReservation={setIdReservation}/>
 			</div>
 		</motion.div>
 

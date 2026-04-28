@@ -4,6 +4,7 @@ import { tokenManager } from "../../../utils/tokenManager";
 
 type modalProps = {
 	onclose: () => void;
+	idReservation: string | undefined;
 };
 
 
@@ -38,7 +39,7 @@ const ModalHeader = (props: {name: string})=> (
 	</div>
 )
 
-const ReservationDetails = () => (
+const ReservationDetails = (props: {id: string | undefined}) => (
 	<motion.div
 		initial={{ opacity: 0 }}
 		animate={{ opacity: 1 }}
@@ -54,7 +55,7 @@ const ReservationDetails = () => (
 					Reservation Number
 				</span>
 				<span className="text-sm tracking-normal">
-					#NR-8829-2024
+					#{props.id}
 				</span>
 			</div>
 
@@ -78,7 +79,7 @@ const ReservationDetails = () => (
 
 )
 
-function ConfirmReservation({ onclose }: modalProps) {
+function ConfirmReservation({ onclose, idReservation }: modalProps) {
 	const user = tokenManager.getUser()
 
 	return (
@@ -107,7 +108,7 @@ function ConfirmReservation({ onclose }: modalProps) {
 			<ModalHeader name={user.nombre}/>
 
 			{/* Reservation Details Box */}
-			<ReservationDetails/>
+			<ReservationDetails id={idReservation}/>
 
 			{/* Informational Text */}
 			<motion.p

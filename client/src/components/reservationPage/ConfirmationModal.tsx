@@ -9,6 +9,7 @@ type modalProps = {
 function ConfirmationModal({ onClose }: modalProps) {
     // Estado que llevara el orden de los modales
     const [step, setStep] = useState(1);
+    const [idReservation, setIdReservation] = useState<undefined | string>(undefined)
 
     // Use effect para desactivar el scroll de la pagina cuando el componente se monte
     useEffect( () => {
@@ -24,9 +25,10 @@ function ConfirmationModal({ onClose }: modalProps) {
         <section className="fixed inset-0 bg-black/50 backdrop-blur-2xl flex items-center justify-center z-60 px-10 py-4">
             {/* --- Evalua que parte del modal debe mostrar --- */}
             { step === 1 ? 
-            <PreConfirmation onclose={ onClose } setStep={ ()=> setStep(2) } /> 
+            <PreConfirmation onclose={ onClose } 
+            setStep={ ()=> setStep(2)} setIdReservation={ (id: string) => setIdReservation(id)}  /> 
             :  
-            <ConfirmReservation onclose={ onClose }/>}
+            <ConfirmReservation onclose={ onClose } idReservation={idReservation}/>}
         </section>
     )
 }
