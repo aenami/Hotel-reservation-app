@@ -1,5 +1,5 @@
 interface ErrorMessage {
-    message: string;
+  message: string;
 }
 
 function ErrorBackend({message}:ErrorMessage) {

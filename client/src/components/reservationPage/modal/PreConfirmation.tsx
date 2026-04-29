@@ -110,6 +110,9 @@ const ModalSuiteInfo = ({dataRoom}: typeRooms) => (
 				Sanctuary Alpha Wing 
 			</p>
 		</div>
+		<div className="flex justify-center items-center">
+			<span className="">{dataRoom.amount}</span>
+		</div>
 	</motion.div>
 );
 

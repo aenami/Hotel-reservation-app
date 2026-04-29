@@ -11,3 +11,9 @@ export type selectedRoomTypes = {
   name: string,
   price: number,
 }
+
+export type Reservations = {
+  check_in: string;
+  check_out: string;
+  rooms: selectedRoomTypes[];
+}

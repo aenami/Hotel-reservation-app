@@ -1,5 +1,3 @@
-//import { tokenManager } from '../utils/tokenManager';
-//import { Link } from 'react-router';
 import SuitCard from '../components/reservationPage/SuitCard';
 import ResumReservation from '../components/reservationPage/ResumReservation';
 import ConfirmationModal from '../components/reservationPage/ConfirmationModal';
@@ -9,10 +7,8 @@ import ErrorBackend from '../components/reservationPage/ErrorBackend';
 import type { Rooms } from '../types/dataTypes';
 import { roomTypesService } from '../services/roomTypesService';
 import { useBookingStore } from '../store/booking';
-import { tokenManager } from '../utils/tokenManager';
 
 function ReservationPage() {
-  const user = tokenManager.getUser();
   const setReservationComment = useBookingStore(state => state.setComments)
   const [visibleModal, setVisibileModal] = useState(false)
   const [isError, setIsError] = useState('')
@@ -46,7 +42,7 @@ function ReservationPage() {
 
   return (
     <main className='bg-[#f8f8f6] relative'>
-      <Header name={user.nombre}/>
+      <Header/>
       
       <section className='flex flex-col gap-14 py-4 px-12 '>
         <div className='flex flex-col max-w-180'>
